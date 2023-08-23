@@ -24,10 +24,8 @@ var repos = []repo{
 
 func main() {
 	if err := run(os.Args); err != nil {
-		fmt.Fprintf(os.Stderr, "fatal: %s\n", err)
-		os.Exit(1)
+		log.Fatalf("fatal: %s\n", err)
 	}
-	os.Exit(0)
 }
 
 func run(args []string) error {
@@ -42,10 +40,13 @@ func run(args []string) error {
 		flags.PrintDefaults()
 		return err
 	}
-
 	if *connString == "" {
 		flags.PrintDefaults()
 		return errors.New("--conn is required")
+	}
+	if *branch == "" {
+		flags.PrintDefaults()
+		return errors.New("--branch flag is required")
 	}
 
 	githubToken := os.Getenv("BACKBOARD_GITHUB_TOKEN")
@@ -90,11 +91,6 @@ func run(args []string) error {
 		}
 
 		return syncAll(ctx, ghClient, db)
-	}
-
-	if *branch == "" {
-		flags.PrintDefaults()
-		return errors.New("--branch flag is required")
 	}
 
 	// Configure the HTTP handler with just /healthz until bootstrapped.
