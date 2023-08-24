@@ -34,7 +34,7 @@ gcloud container clusters get-credentials prime --region us-east4 --project cock
     BACKBOARD_GITHUB_TOKEN=$token \
       ./backboard \
         --conn="postgresql://root@127.0.0.1:26257/backboard?sslmode=disable" \
-        --branch=release-21.1
+        --branch=release-23.1
     ```
 1. It will take quite a while for the first bootstrap to happen.
 1. Run backboard
@@ -42,6 +42,6 @@ gcloud container clusters get-credentials prime --region us-east4 --project cock
     BACKBOARD_GITHUB_TOKEN=$token \
       ./backboard --bind=0.0.0.0:3333 \
         --conn="postgresql://root@127.0.0.1:26257/backboard?sslmode=disable" \
-        --branch=release-21.1
+        --branch=release-23.1
     ```
 1. Open http://localhost:3333 in browser.

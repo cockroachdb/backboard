@@ -271,7 +271,7 @@ type commit struct {
 	body       string
 	merge      bool
 	// oldestTag is the oldest release tag that contains this commit.
-	oldestTag  string
+	oldestTag string
 }
 
 func (c commit) SHA() sha {
@@ -602,7 +602,11 @@ func bootstrap(ctx context.Context, db *sql.DB) error {
 		url, path := repos[i].url(), repos[i].path()
 		if _, err := os.Stat(path); os.IsNotExist(err) {
 			log.Printf("cloning %s into %s", repos[i], path)
-			if err := spawn("git", "clone", "--mirror", url, path); err != nil {
+			if err := spawn("git", "clone", "--filter=blob:none", "--mirror", url, path); err != nil {
+				return err
+			}
+			// Do not run `git gc` automatically
+			if err := spawn("git", "config", "--global", "gc.auto", "0"); err != nil {
 				return err
 			}
 		} else if err != nil {
