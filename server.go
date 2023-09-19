@@ -69,7 +69,12 @@ func (s *server) serveBoard(w http.ResponseWriter, r *http.Request) error {
 		}
 	}
 	if !branchOk {
-		return fmt.Errorf("%q is not a release branch", branch)
+		fmt.Printf("%q is not a release branch", branch)
+		// Use the last item in the release branches slice if the default branch is not found.
+		defaultBranchSub := re.releaseBranches[len(re.releaseBranches)-1]
+		fmt.Printf("using %q as the default branch", defaultBranchSub)
+		branch = defaultBranchSub
+		s.defaultBranch = defaultBranchSub
 	}
 
 	var commits []commit
